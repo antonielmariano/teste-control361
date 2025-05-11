@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { Vehicle, LocationVehicle } from '../types/vehicle';
 import api from '../config/api';
 
@@ -10,6 +10,7 @@ export const useVehicles = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState<'tracked' | 'others'>('tracked');
   const isInitialMount = useRef(true);
 
   const setLocationVehicles = useCallback((locationVehicles: LocationVehicle[]) => {
@@ -23,12 +24,12 @@ export const useVehicles = () => {
     setTrackedVehicles(Array.from(latestLocations.values()));
   }, []);
 
-  const fetchVehicles = useCallback(async (pageNumber: number, type: 'tracked' | 'others') => {
+  const fetchVehicles = useCallback(async (pageNumber: number, vehicleType: 'tracked' | 'others') => {
     try {
       setLoading(true);
       const response = await api.get('recruitment/vehicles/list-with-paginate', {
         params: {
-          type,
+          type: vehicleType,
           page: pageNumber,
           filter,
           perPage
@@ -53,13 +54,19 @@ export const useVehicles = () => {
     }
   }, [filter, perPage, setLocationVehicles]);
 
-  const setPageWithFetch = useCallback((newPage: number, type: 'tracked' | 'others') => {
+  const setPageWithFetch = useCallback((newPage: number, vehicleType: 'tracked' | 'others') => {
     setPage(newPage);
+    setType(vehicleType);
     if (newPage > 1 || !isInitialMount.current) {
-      fetchVehicles(newPage, type);
+      fetchVehicles(newPage, vehicleType);
     }
     isInitialMount.current = false;
   }, [fetchVehicles]);
+
+  // Efeito para carregar os veículos inicialmente
+  useEffect(() => {
+    fetchVehicles(1, type);
+  }, []);
 
   return {
     vehicles,
@@ -70,6 +77,8 @@ export const useVehicles = () => {
     setPage: setPageWithFetch,
     totalPages,
     loading,
-    fetchVehicles
+    fetchVehicles,
+    type,
+    setType
   };
 }; 

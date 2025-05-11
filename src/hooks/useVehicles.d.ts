@@ -5,8 +5,10 @@ export declare const useVehicles: () => {
     filter: string;
     setFilter: import("react").Dispatch<import("react").SetStateAction<string>>;
     page: number;
-    setPage: (newPage: number, type: "tracked" | "others") => void;
+    setPage: (newPage: number, vehicleType: "tracked" | "others") => void;
     totalPages: number;
     loading: boolean;
-    fetchVehicles: (pageNumber: number, type: "tracked" | "others") => Promise<void>;
+    fetchVehicles: (pageNumber: number, vehicleType: "tracked" | "others") => Promise<void>;
+    type: "tracked" | "others";
+    setType: import("react").Dispatch<import("react").SetStateAction<"tracked" | "others">>;
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import MapTracker from '../components/MapTracker';
 import VehicleTable from '../components/VehicleTable/';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -9,7 +9,6 @@ import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { Toaster } from 'react-hot-toast';
 
 const Home: React.FC = () => {
-  const [type, setType] = useState<'tracked' | 'others'>('tracked');
   const {
     vehicles,
     trackedVehicles,
@@ -19,7 +18,9 @@ const Home: React.FC = () => {
     setPage,
     totalPages,
     loading,
-    fetchVehicles
+    fetchVehicles,
+    type,
+    setType
   } = useVehicles();
 
   const { lastElementRef } = useInfiniteScroll({
