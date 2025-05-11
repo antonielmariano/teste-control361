@@ -19,6 +19,9 @@ Um sistema moderno para rastreamento e monitoramento de veículos em tempo real,
 - **Google Maps API**: API de mapas com suporte a marcadores avançados
 - **Axios**: Cliente HTTP para comunicação com o backend
 - **React Query**: Gerenciamento de estado para dados assíncronos
+- **Jest**: Testes unitários
+- **Testing Library**: Testes de componentes React
+- **Cypress**: Testes end-to-end
 
 ## Configuração do Ambiente
 
@@ -49,6 +52,46 @@ npm run dev
 npm run build
 ```
 
+## Testes
+
+### Dependências de Teste
+
+As principais dependências de teste já estão no `package.json`:
+- `jest`, `ts-jest`, `@types/jest`
+- `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`
+- `cypress`, `identity-obj-proxy`, `ts-node`
+
+### Testes Unitários
+
+Execute todos os testes unitários com:
+```bash
+npm test
+```
+
+Para ver a cobertura de testes:
+```bash
+npm run test:coverage
+```
+
+Para rodar em modo watch:
+```bash
+npm run test:watch
+```
+
+### Testes End-to-End (E2E)
+
+Execute os testes E2E com:
+```bash
+npm run test:e2e
+```
+
+Ou abra o Cypress interativamente:
+```bash
+npm run cypress:open
+```
+
+> **Dica:** Os testes unitários utilizam mocks para Google Maps, IntersectionObserver, ResizeObserver e para o arquivo `api.ts` (que depende de `import.meta.env`).
+
 ## Configuração do Mapa
 
 O mapa foi configurado para iniciar sempre no modo escuro, garantindo melhor visibilidade dos marcadores e suporte para estilos personalizados.
@@ -65,13 +108,17 @@ Os marcadores foram implementados usando SVG customizado, incluindo:
 ```
 src/
 ├── components/         # Componentes React
-│   ├── MapTracker.tsx  # Componente principal do mapa
-│   ├── VehicleTable.tsx # Tabela de veículos
-│   └── ...
+│   ├── MapTracker/     # Componente principal do mapa
+│   ├── VehicleTable/   # Tabela de veículos
+│   ├── Header/         # Cabeçalho
+│   ├── FilterSection/  # Filtros e busca
+│   ├── SearchInput/    # Campo de busca
+│   ├── TypeFilter/     # Filtro de tipo
+│   ├── VehicleInfoWindow/ # InfoWindow do mapa
+│   └── LoadingSpinner/ # Spinner de carregamento
+├── hooks/              # Hooks customizados
 ├── types/              # Tipos TypeScript
-│   └── vehicle.ts      # Interfaces para veículos
-├── config/             # Configurações
-│   └── api.ts          # Configuração do Axios
+├── config/             # Configurações (inclui mock para testes)
 └── ...
 ```
 
