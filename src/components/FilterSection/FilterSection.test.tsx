@@ -17,7 +17,7 @@ describe('FilterSection', () => {
         onFilterChange={mockOnFilterChange}
         onSearch={mockOnSearch}
         onTypeChange={mockOnTypeChange}
-        selectedType="tracked"
+        type="tracked"
       />
     );
 
@@ -39,7 +39,7 @@ describe('FilterSection', () => {
         onFilterChange={mockOnFilterChange}
         onSearch={mockOnSearch}
         onTypeChange={mockOnTypeChange}
-        selectedType="tracked"
+        type="tracked"
       />
     );
 
@@ -56,7 +56,7 @@ describe('FilterSection', () => {
         onFilterChange={mockOnFilterChange}
         onSearch={mockOnSearch}
         onTypeChange={mockOnTypeChange}
-        selectedType="tracked"
+        type="tracked"
       />
     );
 
@@ -73,7 +73,7 @@ describe('FilterSection', () => {
         onFilterChange={mockOnFilterChange}
         onSearch={mockOnSearch}
         onTypeChange={mockOnTypeChange}
-        selectedType="tracked"
+        type="tracked"
       />
     );
 
@@ -90,7 +90,7 @@ describe('FilterSection', () => {
         onFilterChange={mockOnFilterChange}
         onSearch={mockOnSearch}
         onTypeChange={mockOnTypeChange}
-        selectedType="tracked"
+        type="tracked"
       />
     );
 

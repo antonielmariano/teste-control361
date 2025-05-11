@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { LoadingSpinner } from './index';
+import LoadingSpinner from './index';
 
 describe('LoadingSpinner', () => {
   it('deve renderizar o spinner corretamente', () => {

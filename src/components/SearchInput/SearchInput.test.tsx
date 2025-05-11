@@ -1,25 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { SearchInput } from './index';
+import SearchInput from './index';
 
 describe('SearchInput', () => {
   const mockOnChange = jest.fn();
-  const mockOnSearch = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('deve renderizar o input de busca corretamente', () => {
+  it('deve renderizar o input corretamente', () => {
     render(
       <SearchInput
         value=""
         onChange={mockOnChange}
-        onSearch={mockOnSearch}
+        placeholder="Buscar por placa ou frota"
       />
     );
 
     expect(screen.getByPlaceholderText('Buscar por placa ou frota')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Buscar' })).toBeInTheDocument();
   });
 
   it('deve chamar onChange quando o input é modificado', () => {
@@ -27,7 +25,7 @@ describe('SearchInput', () => {
       <SearchInput
         value=""
         onChange={mockOnChange}
-        onSearch={mockOnSearch}
+        placeholder="Buscar por placa ou frota"
       />
     );
 
@@ -37,46 +35,42 @@ describe('SearchInput', () => {
     expect(mockOnChange).toHaveBeenCalledWith('ABC123');
   });
 
-  it('deve chamar onSearch quando o botão é clicado', () => {
-    render(
-      <SearchInput
-        value="ABC123"
-        onChange={mockOnChange}
-        onSearch={mockOnSearch}
-      />
-    );
-
-    const searchButton = screen.getByRole('button', { name: 'Buscar' });
-    fireEvent.click(searchButton);
-
-    expect(mockOnSearch).toHaveBeenCalled();
-  });
-
-  it('deve chamar onSearch quando Enter é pressionado', () => {
-    render(
-      <SearchInput
-        value="ABC123"
-        onChange={mockOnChange}
-        onSearch={mockOnSearch}
-      />
-    );
-
-    const input = screen.getByPlaceholderText('Buscar por placa ou frota');
-    fireEvent.keyPress(input, { key: 'Enter', code: 13, charCode: 13 });
-
-    expect(mockOnSearch).toHaveBeenCalled();
-  });
-
   it('deve ter as classes corretas', () => {
     render(
       <SearchInput
         value=""
         onChange={mockOnChange}
-        onSearch={mockOnSearch}
+        placeholder="Buscar por placa ou frota"
+      />
+    );
+
+    const input = screen.getByPlaceholderText('Buscar por placa ou frota');
+    expect(input).toHaveClass('w-full', 'px-4', 'py-2', 'border', 'rounded-lg');
+  });
+
+  it('deve ter o valor correto', () => {
+    render(
+      <SearchInput
+        value="ABC123"
+        onChange={mockOnChange}
+        placeholder="Buscar por placa ou frota"
+      />
+    );
+
+    const input = screen.getByPlaceholderText('Buscar por placa ou frota');
+    expect(input).toHaveValue('ABC123');
+  });
+
+  it('deve ter o container com as classes corretas', () => {
+    render(
+      <SearchInput
+        value=""
+        onChange={mockOnChange}
+        placeholder="Buscar por placa ou frota"
       />
     );
 
     const container = screen.getByTestId('search-input-container');
-    expect(container).toHaveClass('flex', 'gap-2', 'w-full', 'md:w-auto');
+    expect(container).toHaveClass('relative', 'w-full');
   });
 }); 

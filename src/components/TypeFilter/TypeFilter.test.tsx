@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { TypeFilter } from './index';
+import TypeFilter from './index';
 
 describe('TypeFilter', () => {
   const mockOnChange = jest.fn();
@@ -11,7 +11,7 @@ describe('TypeFilter', () => {
   it('deve renderizar os radio buttons corretamente', () => {
     render(
       <TypeFilter
-        selectedType="tracked"
+        value="tracked"
         onChange={mockOnChange}
       />
     );
@@ -20,22 +20,10 @@ describe('TypeFilter', () => {
     expect(screen.getByLabelText('Não rastreados')).toBeInTheDocument();
   });
 
-  it('deve ter o tipo rastreado selecionado por padrão', () => {
+  it('deve chamar onChange quando um radio button é clicado', () => {
     render(
       <TypeFilter
-        selectedType="tracked"
-        onChange={mockOnChange}
-      />
-    );
-
-    const trackedRadio = screen.getByLabelText('Rastreados');
-    expect(trackedRadio).toBeChecked();
-  });
-
-  it('deve chamar onChange quando o tipo é alterado', () => {
-    render(
-      <TypeFilter
-        selectedType="tracked"
+        value="tracked"
         onChange={mockOnChange}
       />
     );
@@ -49,7 +37,7 @@ describe('TypeFilter', () => {
   it('deve ter as classes corretas', () => {
     render(
       <TypeFilter
-        selectedType="tracked"
+        value="tracked"
         onChange={mockOnChange}
       />
     );
@@ -58,17 +46,27 @@ describe('TypeFilter', () => {
     expect(container).toHaveClass('flex', 'gap-4');
   });
 
-  it('deve ter os labels com as classes corretas', () => {
+  it('deve ter o radio button correto selecionado', () => {
     render(
       <TypeFilter
-        selectedType="tracked"
+        value="tracked"
         onChange={mockOnChange}
       />
     );
 
-    const labels = screen.getAllByRole('label');
-    labels.forEach(label => {
-      expect(label).toHaveClass('flex', 'items-center', 'gap-2', 'cursor-pointer');
-    });
+    const trackedRadio = screen.getByLabelText('Rastreados');
+    expect(trackedRadio).toBeChecked();
+  });
+
+  it('deve ter o layout responsivo correto', () => {
+    render(
+      <TypeFilter
+        value="tracked"
+        onChange={mockOnChange}
+      />
+    );
+
+    const container = screen.getByTestId('type-filter-container');
+    expect(container).toHaveClass('flex', 'gap-4');
   });
 }); 

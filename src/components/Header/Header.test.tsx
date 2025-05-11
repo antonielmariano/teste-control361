@@ -3,23 +3,23 @@ import { Header } from './index';
 
 describe('Header', () => {
   it('deve renderizar o nome do usuário corretamente', () => {
-    render(<Header />);
+    render(<Header name="Antoniel Mariano" />);
     expect(screen.getByText('Antoniel Mariano')).toBeInTheDocument();
   });
 
   it('deve renderizar o título da aplicação', () => {
-    render(<Header />);
+    render(<Header name="Antoniel Mariano" />);
     expect(screen.getByText('Mapa rastreador')).toBeInTheDocument();
   });
 
   it('deve ter a classe correta no container', () => {
-    render(<Header />);
+    render(<Header name="Antoniel Mariano" />);
     const header = screen.getByRole('banner');
     expect(header).toHaveClass('bg-white', 'shadow');
   });
 
   it('deve ter a estrutura correta do layout', () => {
-    render(<Header />);
+    render(<Header name="Antoniel Mariano" />);
     
     // Verifica se o container principal existe
     expect(screen.getByTestId('header-container')).toBeInTheDocument();

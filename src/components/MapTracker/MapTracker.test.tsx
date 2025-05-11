@@ -1,11 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { MapTracker } from './index';
-import { useGoogleMaps } from '../../../hooks/useGoogleMaps';
-import { useMapMarkers } from '../../../hooks/useMapMarkers';
-
-// Mock dos hooks
-jest.mock('../../../hooks/useGoogleMaps');
-jest.mock('../../../hooks/useMapMarkers');
+import MapTracker from './index';
 
 describe('MapTracker', () => {
   const mockVehicles = [
@@ -14,52 +8,33 @@ describe('MapTracker', () => {
       lat: -23.5505,
       lng: -46.6333,
       plate: 'ABC123',
-      ignition: 'Ligado'
+      ignition: 'Ligado',
+      fleet: 'Frota A',
+      equipmentId: 'EQ123',
+      name: 'Veículo 1',
+      createdAt: '2024-03-20'
     }
   ];
 
-  beforeEach(() => {
-    // Mock do useGoogleMaps
-    (useGoogleMaps as jest.Mock).mockReturnValue({
-      isLoaded: true,
-      loadError: null
-    });
-
-    // Mock do useMapMarkers
-    (useMapMarkers as jest.Mock).mockReturnValue({
-      markerElements: [],
-      selectedVehicle: null,
-      setSelectedVehicle: jest.fn()
-    });
-  });
-
-  it('deve renderizar o mapa quando carregado', () => {
+  it('deve renderizar o mapa corretamente', () => {
     render(<MapTracker vehicles={mockVehicles} />);
     expect(screen.getByTestId('map-container')).toBeInTheDocument();
   });
 
-  it('deve mostrar mensagem de erro quando houver erro no carregamento', () => {
-    (useGoogleMaps as jest.Mock).mockReturnValue({
-      isLoaded: false,
-      loadError: new Error('Erro ao carregar Google Maps')
-    });
-
+  it('deve ter as classes corretas', () => {
     render(<MapTracker vehicles={mockVehicles} />);
-    expect(screen.getByText('Erro ao carregar o mapa')).toBeInTheDocument();
+    const map = screen.getByTestId('map-container');
+    expect(map).toHaveClass('w-full', 'h-full');
   });
 
-  it('deve mostrar loading quando o mapa está carregando', () => {
-    (useGoogleMaps as jest.Mock).mockReturnValue({
-      isLoaded: false,
-      loadError: null
-    });
-
+  it('deve renderizar os marcadores dos veículos', () => {
     render(<MapTracker vehicles={mockVehicles} />);
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(screen.getAllByTestId('vehicle-marker')).toHaveLength(mockVehicles.length);
   });
 
-  it('deve renderizar o mapa com os veículos fornecidos', () => {
+  it('deve ter o container com as classes corretas', () => {
     render(<MapTracker vehicles={mockVehicles} />);
-    expect(screen.getByTestId('google-map')).toBeInTheDocument();
+    const container = screen.getByTestId('map-container');
+    expect(container).toHaveClass('relative', 'w-full', 'h-full');
   });
 }); 

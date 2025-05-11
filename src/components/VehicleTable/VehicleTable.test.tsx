@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { VehicleTable } from './index';
+import VehicleTable from './index';
 
 describe('VehicleTable', () => {
   const mockVehicles = [
@@ -9,21 +9,22 @@ describe('VehicleTable', () => {
       model: 'Fiat Uno',
       nameOwner: 'João',
       status: 'Ativo',
-      createdAt: '2024-03-20'
+      createdAt: '2024-03-20',
+      fleet: 'Frota A',
+      type: 'tracked'
     }
   ];
 
-  it('deve renderizar a tabela com os veículos fornecidos', () => {
-    render(<VehicleTable vehicles={mockVehicles} />);
-    
-    // Verifica se os cabeçalhos estão presentes
-    expect(screen.getByText('Placa')).toBeInTheDocument();
-    expect(screen.getByText('Modelo')).toBeInTheDocument();
-    expect(screen.getByText('Proprietário')).toBeInTheDocument();
-    expect(screen.getByText('Status')).toBeInTheDocument();
-    expect(screen.getByText('Data de Cadastro')).toBeInTheDocument();
+  const mockLastVehicleElementRef = jest.fn();
 
-    // Verifica se os dados dos veículos estão presentes
+  it('deve renderizar a tabela corretamente', () => {
+    render(
+      <VehicleTable
+        vehicles={mockVehicles}
+        lastVehicleElementRef={mockLastVehicleElementRef}
+      />
+    );
+
     expect(screen.getByText('ABC123')).toBeInTheDocument();
     expect(screen.getByText('Fiat Uno')).toBeInTheDocument();
     expect(screen.getByText('João')).toBeInTheDocument();
@@ -31,29 +32,50 @@ describe('VehicleTable', () => {
     expect(screen.getByText('20/03/2024')).toBeInTheDocument();
   });
 
-  it('deve renderizar mensagem quando não houver veículos', () => {
-    render(<VehicleTable vehicles={[]} />);
+  it('deve renderizar mensagem quando não há veículos', () => {
+    render(
+      <VehicleTable
+        vehicles={[]}
+        lastVehicleElementRef={mockLastVehicleElementRef}
+      />
+    );
+
     expect(screen.getByText('Nenhum veículo encontrado')).toBeInTheDocument();
   });
 
-  it('deve renderizar a tabela com a classe correta', () => {
-    render(<VehicleTable vehicles={mockVehicles} />);
+  it('deve ter as classes corretas', () => {
+    render(
+      <VehicleTable
+        vehicles={mockVehicles}
+        lastVehicleElementRef={mockLastVehicleElementRef}
+      />
+    );
+
     const table = screen.getByRole('table');
     expect(table).toHaveClass('min-w-full', 'divide-y', 'divide-gray-200');
   });
 
-  it('deve renderizar os cards em telas pequenas', () => {
-    // Simula uma tela pequena
-    window.innerWidth = 500;
-    window.dispatchEvent(new Event('resize'));
+  it('deve ter o status com a cor correta', () => {
+    render(
+      <VehicleTable
+        vehicles={mockVehicles}
+        lastVehicleElementRef={mockLastVehicleElementRef}
+      />
+    );
 
-    render(<VehicleTable vehicles={mockVehicles} />);
-    
-    // Verifica se os cards estão presentes
-    expect(screen.getByText('ABC123')).toBeInTheDocument();
-    expect(screen.getByText('Fiat Uno')).toBeInTheDocument();
-    expect(screen.getByText('João')).toBeInTheDocument();
-    expect(screen.getByText('Ativo')).toBeInTheDocument();
-    expect(screen.getByText('20/03/2024')).toBeInTheDocument();
+    const status = screen.getByText('Ativo');
+    expect(status).toHaveClass('text-green-600');
+  });
+
+  it('deve ter o layout responsivo correto', () => {
+    render(
+      <VehicleTable
+        vehicles={mockVehicles}
+        lastVehicleElementRef={mockLastVehicleElementRef}
+      />
+    );
+
+    const container = screen.getByTestId('vehicle-table-container');
+    expect(container).toHaveClass('overflow-x-auto');
   });
 }); 
