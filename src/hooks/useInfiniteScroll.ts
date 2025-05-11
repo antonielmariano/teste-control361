@@ -10,7 +10,7 @@ interface UseInfiniteScrollProps {
 export const useInfiniteScroll = ({ loading, page, totalPages, onPageChange }: UseInfiniteScrollProps) => {
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const lastElementRef = useCallback((node: HTMLTableRowElement | null) => {
+  const lastElementRef = useCallback((node: HTMLTableRowElement | HTMLDivElement | null) => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
     

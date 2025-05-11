@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { Vehicle, LocationVehicle } from '../types/vehicle';
 import api from '../config/api';
 
@@ -10,6 +10,7 @@ export const useVehicles = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [loading, setLoading] = useState(false);
+  const isInitialMount = useRef(true);
 
   const setLocationVehicles = useCallback((locationVehicles: LocationVehicle[]) => {
     const latestLocations = new Map();
@@ -52,13 +53,21 @@ export const useVehicles = () => {
     }
   }, [filter, perPage, setLocationVehicles]);
 
+  const setPageWithFetch = useCallback((newPage: number, type: 'tracked' | 'others') => {
+    setPage(newPage);
+    if (newPage > 1 || !isInitialMount.current) {
+      fetchVehicles(newPage, type);
+    }
+    isInitialMount.current = false;
+  }, [fetchVehicles]);
+
   return {
     vehicles,
     trackedVehicles,
     filter,
     setFilter,
     page,
-    setPage,
+    setPage: setPageWithFetch,
     totalPages,
     loading,
     fetchVehicles

@@ -26,19 +26,12 @@ const Home: React.FC = () => {
     loading,
     page,
     totalPages,
-    onPageChange: setPage
+    onPageChange: (newPage) => setPage(newPage, type)
   });
 
   useEffect(() => {
-    setPage(1);
-    fetchVehicles(1, type);
-  }, [type, fetchVehicles, setPage]);
-
-  useEffect(() => {
-    if (page > 1) {
-      fetchVehicles(page, type);
-    }
-  }, [page, type, fetchVehicles]);
+    setPage(1, type);
+  }, [type, setPage]);
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -1,14 +1,25 @@
+import { useState, useEffect } from 'react';
 import type { Vehicle } from '../../types/vehicle';
 
 interface VehicleTableProps {
   vehicles: Vehicle[];
-  lastVehicleElementRef: (node: HTMLTableRowElement | null) => void;
+  lastVehicleElementRef: (node: HTMLTableRowElement | HTMLDivElement | null) => void;
 }
 
 const VehicleTable = ({ vehicles, lastVehicleElementRef }: VehicleTableProps) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div>
-      {/* Tabela para telas maiores */}
       <div className="hidden md:block">
         <table className="min-w-full border border-gray-200 rounded-2xl">
           <thead className="bg-[#1a1a1a]">
@@ -23,8 +34,8 @@ const VehicleTable = ({ vehicles, lastVehicleElementRef }: VehicleTableProps) =>
           <tbody className="bg-[#16232E]">
             {vehicles.map((vehicle, index) => (
               <tr 
-                key={vehicle.id} 
-                ref={index === vehicles.length - 1 ? lastVehicleElementRef : null}
+                key={vehicle.id + index + 'row'}
+                ref={!isMobile && index === vehicles.length - 1 ? lastVehicleElementRef : null}
                 className="hover:bg-[#1a1a1a] transition-colors"
               >
                 <td className="px-4 py-3 border-b text-white">{vehicle.plate}</td>
@@ -38,12 +49,11 @@ const VehicleTable = ({ vehicles, lastVehicleElementRef }: VehicleTableProps) =>
         </table>
       </div>
 
-      {/* Cards para telas menores */}
       <div className="md:hidden space-y-4">
         {vehicles.map((vehicle, index) => (
           <div
-            key={vehicle.id}
-            ref={index === vehicles.length - 1 ? lastVehicleElementRef : null}
+            key={vehicle.id + index + 'card'}
+            ref={isMobile && index === vehicles.length - 1 ? lastVehicleElementRef : null}
             className="bg-[#16232E] rounded-xl p-4 border border-gray-200"
           >
             <div className="grid grid-cols-2 gap-2">
